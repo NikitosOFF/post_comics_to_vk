@@ -6,9 +6,8 @@
 (ссылка [https://vk.com/apps?act=manage](https://vk.com/apps?act=manage)).
 2.Получите ```client_id``` созданного приложения и сохраните его в .env ```VK_APP_CLIENT_ID=""```
 3.Перейдите по ссылке 
-[https://oauth.vk.com/authorize/?client_id=<YOUR_CLIENT_ID>&scope=photos,groups,wall,offline&response_type=token]
-(https://oauth.vk.com/authorize/?client_id=<YOUR_CLIENT_ID>&scope=photos,groups,wall,offline&response_type=token) 
-, где <YOUR_CLIENT_ID> - ваш ```client_id``` , который вы получили в прошлом шаге. В адресной строке вы увидите 
+https://oauth.vk.com/authorize/?client_id=<YOUR_CLIENT_ID>&scope=photos,groups,wall,offline&response_type=token
+, где YOUR_CLIENT_ID - ваш ```client_id``` , который вы получили в прошлом шаге. В адресной строке вы увидите 
 ```access_token=```, сохраните его в .env ```VK_ACCESS_TOKEN=""```
 4.Сохраните ```group_id``` в .env ```VK_GROUP_ID=""```
 
