@@ -13,7 +13,7 @@ def download_image(image_url, path_to_image):
         file.write(response.content)
 
 
-def fetch_xkdc_comics(directory):
+def fetch_random_xkdc_comics(directory):
     xkdc_current_comics_api_url = 'http://xkcd.com/info.0.json'
     number_of_comics = requests.get(xkdc_current_comics_api_url).json()['num']
     random_comics = random.randint(0, number_of_comics)
@@ -62,11 +62,13 @@ def save_comics_on_the_wall(access_token, data_from_server, version):
     return response.json()['response']
 
 
-def wall_post(access_token, version, group_id, comics_data, photos_data):
+def post_comics_on_the_wall(access_token, version, group_id, comics_data, photos_data):
     vk_api_url = 'https://api.vk.com/method/wall.post?'
-    attachments = ['photo' + str([data['owner_id'] for data in photos_data][0]) + '_' + str(
-        [data['id'] for data in photos_data][0])]
-    print(attachments)
+    attachments = [
+        'photo{}_{}'.format(
+            str([data['owner_id'] for data in photos_data][0]),
+            str([data['id'] for data in photos_data][0]))
+    ]
     parametres = {
         'owner_id': '-' + group_id,
         'from_group': '1',
@@ -75,9 +77,7 @@ def wall_post(access_token, version, group_id, comics_data, photos_data):
         'access_token': access_token,
         'v': version
     }
-    response = requests.post(vk_api_url, params=parametres)
-    response.raise_for_status()
-    print(response.json())
+    requests.post(vk_api_url, params=parametres)
 
 
 if __name__ == '__main__':
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     vk_group_id = os.getenv("VK_GROUP_ID")
     vk_version = '5.103'
 
-    comics_data = fetch_xkdc_comics(images_directory)
+    comics_data = fetch_random_xkdc_comics(images_directory)
     comics_image_type = comics_data['img'].split('.')[-1]
     comics_name = '{}.{}'.format(comics_data['safe_title'], comics_image_type)
     path_to_comics = os.path.join(images_directory, comics_name)
@@ -104,5 +104,5 @@ if __name__ == '__main__':
             path_to_comics),
         vk_version)
 
-    wall_post(vk_access_token, vk_version, vk_group_id, comics_data, photos_data)
+    post_comics_on_the_wall(vk_access_token, vk_version, vk_group_id, comics_data, photos_data)
     shutil.rmtree(images_directory)
